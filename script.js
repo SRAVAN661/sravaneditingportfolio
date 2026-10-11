@@ -15,3 +15,28 @@ document.querySelectorAll(".reel-card video").forEach(v=>v.addEventListener("pla
 document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener("click",e=>{
  const t=document.querySelector(a.getAttribute("href")); if(t){e.preventDefault();t.scrollIntoView({behavior:"smooth"})}
 }));
+
+const reelsTrack = document.getElementById("reels-track");
+const reelsPrev = document.getElementById("reels-prev");
+const reelsNext = document.getElementById("reels-next");
+
+if (reelsTrack && reelsPrev && reelsNext) {
+  const scrollAmount = () => {
+    const card = reelsTrack.firstElementChild;
+    return card ? card.getBoundingClientRect().width + 22 : 300;
+  };
+
+  reelsPrev.addEventListener("click", () => {
+    reelsTrack.scrollBy({
+      left: -scrollAmount(),
+      behavior: "smooth"
+    });
+  });
+
+  reelsNext.addEventListener("click", () => {
+    reelsTrack.scrollBy({
+      left: scrollAmount(),
+      behavior: "smooth"
+    });
+  });
+}
