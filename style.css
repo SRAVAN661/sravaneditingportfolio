@@ -304,143 +304,59 @@ button {
 /* Horizontal reel track */
 
 .reels-track {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
     align-items: stretch;
-    gap: 22px;
 
+    gap: 20px;
     width: 100%;
-    max-width: 100%;
-
-    overflow-x: auto;
+    overflow-x: auto !important;
     overflow-y: hidden;
 
     padding: 15px 5px 25px;
 
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
-
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: var(--accent) transparent;
 }
 
-/* Each reel card */
-
-.reels-track > *,
-.reel-card {
-    flex: 0 0 260px;
-    min-width: 0;
-    max-width: 260px;
+/* Keep every reel in one row */
+.reels-track > .reel-card {
+    flex: 0 0 300px !important;
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
 
     scroll-snap-align: start;
-
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-
-    overflow: hidden;
-
-    transition:
-        transform 0.35s ease,
-        border-color 0.35s ease,
-        box-shadow 0.35s ease;
 }
 
-/* Reel hover animation */
-
-.reels-track > *:hover,
-.reel-card:hover {
-    transform: translateY(-7px);
-    border-color: var(--accent);
-    box-shadow: 0 10px 35px rgba(255, 107, 53, 0.16);
-}
-
-/* Video sizing */
-
-.reels-track video,
-.reel-card video {
+/* Video appearance */
+.reels-track .reel-card video {
     display: block;
     width: 100%;
     aspect-ratio: 9 / 16;
     object-fit: cover;
-    background: #000000;
 }
 
-/* Reel captions */
-
-.reel-card h3,
-.reels-track h3 {
-    padding: 14px 14px 5px;
-    font-size: 17px;
-    color: var(--text);
-}
-
-.reel-card p,
-.reels-track p {
-    padding: 0 14px 15px;
-    font-size: 13px;
-    color: var(--muted);
-}
-
-/* Horizontal scrollbar — Chrome / Edge */
-
+/* Horizontal scrollbar */
 .reels-track::-webkit-scrollbar {
     height: 6px;
 }
 
-.reels-track::-webkit-scrollbar-track {
-    background: #242424;
-    border-radius: 10px;
-}
-
 .reels-track::-webkit-scrollbar-thumb {
-    background: var(--accent);
+    background: #ff6b35;
     border-radius: 10px;
 }
 
-.reels-track::-webkit-scrollbar-thumb:hover {
-    background: #ff895e;
-}
-
-/* Reel navigation buttons */
-
-.reels-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin-top: 15px;
-}
-
-.reels-controls button,
-.reel-prev,
-.reel-next {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-
-    background: var(--surface-light);
-    color: #ffffff;
-
-    border: 1px solid var(--accent);
-    font-size: 22px;
-
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-
-    transition:
-        background 0.3s ease,
-        transform 0.3s ease;
-}
-
-.reels-controls button:hover,
-.reel-prev:hover,
-.reel-next:hover {
-    background: var(--accent);
-    transform: scale(1.08);
+/* Mobile screens */
+@media (max-width: 600px) {
+    .reels-track > .reel-card {
+        flex: 0 0 240px !important;
+        width: 240px;
+        min-width: 240px;
+        max-width: 240px;
+    }
 }
 
 /* =========================================
