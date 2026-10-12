@@ -247,23 +247,31 @@
       border-radius: 20px;
     }
 
-    .reel-card {
-      flex: 0 0 260px;
-      min-width: 0;
-      overflow: hidden;
-      scroll-snap-align: start;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 15px;
-      transition: transform .35s ease, border-color .35s ease,
-        box-shadow .35s ease;
-    }
+   .reel-card {
+    display: block !important;
+    flex: 0 0 300px !important;
+    width: 300px !important;
+    min-width: 300px !important;
+    max-width: 300px !important;
 
-    .reel-card:hover {
-      transform: translateY(-7px);
-      border-color: rgba(255,113,59,.7);
-      box-shadow: 0 15px 38px rgba(0,0,0,.3);
-    }
+    overflow: hidden;
+    scroll-snap-align: start;
+
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+
+    transition:
+        transform 0.35s ease,
+        border-color 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+.reel-card:hover {
+    transform: translateY(-7px);
+    border-color: var(--accent);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
 
     .reel-video {
       aspect-ratio: 9 / 16;
