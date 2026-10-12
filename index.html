@@ -226,31 +226,46 @@
       transform: scale(1.08);
     }
 
-   .reels-track {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    align-items: stretch !important;
-    gap: 20px;
+    /* FORCE reels into one horizontal scrolling row */
+    #reels .reels-container { display: block; width: 100%; min-width: 0; overflow: hidden; }
 
-    width: 100%;
-    overflow-x: scroll !important;
-    overflow-y: hidden !important;
+    #reels .reels-track {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      align-items: stretch !important;
+      justify-content: flex-start !important;
+      gap: 20px;
+      width: 100%;
+      min-width: 0;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      padding: 12px 4px 25px;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent) transparent;
+      -webkit-overflow-scrolling: touch;
+    }
 
-    padding: 12px 4px 25px;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-}
+    #reels .reels-track > article.reel-card {
+      display: block !important;
+      position: relative;
+      flex: 0 0 300px !important;
+      width: 300px !important;
+      min-width: 300px !important;
+      max-width: 300px !important;
+      margin: 0 !important;
+      float: none !important;
+      scroll-snap-align: start;
+    }
 
-#reels .reels-track > .reel-card {
-    display: block !important;
-    flex: 0 0 300px !important;
-    width: 300px !important;
-    min-width: 300px !important;
-    max-width: 300px !important;
-    scroll-snap-align: start;
-}
+    .reels-track::-webkit-scrollbar { height: 5px; }
+
+    .reels-track::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border-radius: 20px;
+    }
 
    .reel-card {
     display: block !important;
@@ -288,6 +303,7 @@
       display: block;
       width: 100%;
       height: 100%;
+      aspect-ratio: 9 / 16;
       object-fit: cover;
       transition: transform .5s ease;
     }
@@ -462,7 +478,12 @@
         flex-direction: column;
       }
 
-      .reel-card { flex-basis: 76%; }
+      #reels .reels-track > article.reel-card {
+        flex: 0 0 76vw !important;
+        width: 76vw !important;
+        min-width: 76vw !important;
+        max-width: 76vw !important;
+      }
 
       .accounts-grid,
       .skills-grid { grid-template-columns: 1fr; }
@@ -492,6 +513,275 @@
         transform: none;
       }
     }
+    /* HARD OVERRIDE: vertical reels in one horizontal row */
+    #reels .reels-container,
+    #reels .reels-container.reveal {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      overflow: hidden !important;
+    }
+
+    #reels #reels-track,
+    #reels .reels-track {
+      display: flex !important;
+      flex-flow: row nowrap !important;
+      justify-content: flex-start !important;
+      align-items: flex-start !important;
+      gap: 20px !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      height: auto !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent) transparent;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    #reels #reels-track > .reel-card,
+    #reels .reels-track > .reel-card {
+      display: block !important;
+      flex: 0 0 280px !important;
+      width: 280px !important;
+      min-width: 280px !important;
+      max-width: 280px !important;
+      height: auto !important;
+      margin: 0 !important;
+      float: none !important;
+      clear: none !important;
+      scroll-snap-align: start;
+    }
+
+    #reels .reel-video {
+      width: 100% !important;
+      aspect-ratio: 9 / 16 !important;
+      height: auto !important;
+      overflow: hidden;
+      background: #080808;
+    }
+
+    #reels .reel-video video {
+      display: block !important;
+      width: 100% !important;
+      height: 100% !important;
+      aspect-ratio: 9 / 16 !important;
+      object-fit: cover !important;
+    }
+
+    #reels #reels-track::-webkit-scrollbar { height: 6px; }
+    #reels #reels-track::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border-radius: 20px;
+    }
+
+    @media (max-width: 760px) {
+      #reels #reels-track > .reel-card,
+      #reels .reels-track > .reel-card {
+        flex: 0 0 76vw !important;
+        width: 76vw !important;
+        min-width: 76vw !important;
+        max-width: 76vw !important;
+      }
+    }
+
+
+
+    /* Portfolio polish: accessible focus states, cinematic reel cards, responsive contact form */
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+    .reel-card { transform: translateY(0); }
+    .reel-card::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      border-radius: inherit; opacity: 0;
+      background: linear-gradient(145deg, rgba(255,113,59,.12), transparent 45%);
+      transition: opacity .35s ease;
+    }
+    .reel-card:hover::after { opacity: 1; }
+    .reel-info p { color: var(--muted); margin-bottom: 2px; }
+    .reel-video video { background: #080808; }
+    .reels-controls button:focus-visible, .button:focus-visible { outline-offset: 5px; }
+    .contact-form {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px; margin-top: 26px;
+    }
+    .form-field { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+    .form-field.full { grid-column: 1 / -1; }
+    .form-field label { font-size: 13px; color: var(--muted); font-weight: 700; }
+    .form-field input, .form-field select, .form-field textarea {
+      width: 100%; border: 1px solid var(--border); border-radius: 10px;
+      padding: 13px 14px; color: var(--text); background: #101010;
+      font: inherit; font-size: 15px; transition: border-color .2s, box-shadow .2s;
+    }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+      outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,113,59,.13);
+    }
+    .form-field textarea { min-height: 135px; resize: vertical; }
+    .form-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; grid-column: 1 / -1; }
+    .form-note { color: var(--muted); font-size: 12px; margin: 0; }
+    .form-status { grid-column: 1 / -1; color: var(--accent); min-height: 1.4em; margin: 0; font-size: 14px; }
+    .button { cursor: pointer; }
+    @media (hover: none) { .reel-card:hover { transform: none; box-shadow: none; } }
+    @media (max-width: 600px) {
+      .contact-form { grid-template-columns: 1fr; gap: 13px; }
+      .form-field.full, .form-actions, .form-status { grid-column: 1; }
+      .contact-panel { padding: 20px !important; }
+      #reels .reels-track > article.reel-card {
+        flex: 0 0 min(78vw, 320px) !important;
+        width: min(78vw, 320px) !important;
+        min-width: min(78vw, 320px) !important;
+        max-width: min(78vw, 320px) !important;
+      }
+      .reels-controls button { min-width: 44px; min-height: 44px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reel-card, .reel-card::after, .reel-video video { transition: none !important; }
+    }
+
+    /* Premium interaction polish */
+    :root { --accent-glow: rgba(255,113,59,.28); }
+    body::before {
+      content: ""; position: fixed; inset: -25%; z-index: -1; pointer-events: none;
+      background: radial-gradient(circle at 18% 20%, rgba(255,113,59,.055), transparent 30%),
+                  radial-gradient(circle at 82% 68%, rgba(116,77,255,.045), transparent 32%);
+      animation: ambientDrift 18s ease-in-out infinite alternate;
+    }
+    @keyframes ambientDrift { from { transform: translate3d(-1%,0,0) scale(1); } to { transform: translate3d(1%,1%,0) scale(1.04); } }
+    .about-intro {
+      font-size: clamp(42px, 7.5vw, 88px) !important; line-height: 1.02 !important;
+      letter-spacing: -2.8px; margin: 18px 0 12px !important; font-weight: 900;
+    }
+    .about-intro span {
+      display: inline-block; color: var(--accent);
+      background: linear-gradient(100deg, #ff713b 5%, #ffb36b 45%, #ff713b 85%);
+      background-size: 220% auto; -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; animation: nameShimmer 5s linear infinite;
+    }
+    @keyframes nameShimmer { to { background-position: 220% center; } }
+    .about-tagline { margin: 0 0 22px; font-size: clamp(18px, 2.4vw, 26px); color: #eee; }
+    .section-heading h2, .contact-panel h2 { letter-spacing: -1.2px; }
+    .button, .reels-controls button, .nav-links a {
+      position: relative; transition: transform .25s ease, color .25s ease,
+      background .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+    .button:hover, .reels-controls button:hover {
+      transform: translateY(-3px); border-color: var(--accent);
+      box-shadow: 0 8px 28px var(--accent-glow);
+    }
+    .button-primary:hover { background: #ff8b5f; color: #101010; }
+    .button:active, .reels-controls button:active { transform: scale(.96); }
+    .nav-links a:hover { text-shadow: 0 0 18px var(--accent-glow); }
+    .reel-card { isolation: isolate; }
+    .reel-card:hover { box-shadow: 0 18px 45px rgba(0,0,0,.42), 0 0 0 1px var(--accent-glow); }
+    .reel-info h3 { transition: color .25s ease, transform .25s ease; }
+    .reel-card:hover .reel-info h3 { color: var(--accent); transform: translateX(3px); }
+    .form-field input:hover, .form-field select:hover, .form-field textarea:hover { border-color: rgba(255,113,59,.6); }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+      transform: translateY(-1px); box-shadow: 0 0 0 3px rgba(255,113,59,.15), 0 8px 22px rgba(0,0,0,.18);
+    }
+    .reels-controls button {
+      min-width: 44px; min-height: 44px; border-radius: 50%; cursor: pointer;
+      border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    }
+    .reels-controls button:hover { background: var(--accent); color: #111; }
+    .reel-video video { accent-color: var(--accent); }
+    .reel-video { position: relative; }
+    .reel-video video:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+    @media (max-width: 700px) {
+      .about-intro { letter-spacing: -1.7px; }
+      .site-header { gap: 12px; }
+      .nav-links { gap: 13px; overflow-x: auto; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+    }
+
+  
+
+    /* 3D depth effect for reels while the horizontal row scrolls */
+    #reels .reels-container { perspective: 1200px; perspective-origin: 50% 45%; }
+    #reels #reels-track {
+      transform-style: preserve-3d;
+      scroll-padding-inline: 24px;
+      overscroll-behavior-x: contain;
+    }
+    #reels #reels-track > .reel-card {
+      --reel-rotate: 0deg;
+      --reel-z: 0px;
+      --reel-scale: 1;
+      transform: perspective(900px) rotateY(var(--reel-rotate)) translateZ(var(--reel-z)) scale(var(--reel-scale));
+      transform-origin: center center;
+      backface-visibility: hidden;
+      will-change: transform, opacity;
+      transition: transform .22s ease-out, opacity .22s ease-out, border-color .3s ease, box-shadow .3s ease;
+    }
+    #reels #reels-track > .reel-card:hover {
+      transform: perspective(900px) rotateY(var(--reel-rotate)) translateZ(calc(var(--reel-z) + 18px)) translateY(-7px) scale(1.015);
+      z-index: 2;
+    }
+    #reels .reel-info h3 { transition: color .25s ease, letter-spacing .25s ease; }
+    #reels .reel-card:hover .reel-info h3 { letter-spacing: .3px; }
+    @media (prefers-reduced-motion: reduce) {
+      #reels #reels-track > .reel-card { transition: none !important; }
+    }
+
+
+    /* Portfolio-wide cinematic motion system */
+    :root { --motion-fast: 180ms; --motion-smooth: 420ms; --ease-cinematic: cubic-bezier(.22,.8,.25,1); }
+    body { isolation: isolate; }
+    body::before {
+      content: ""; position: fixed; inset: -20%; z-index: -1; pointer-events: none;
+      background: radial-gradient(ellipse at 12% 18%, rgba(255,113,59,.10), transparent 34%),
+                  radial-gradient(ellipse at 86% 65%, rgba(109,76,255,.08), transparent 32%);
+      animation: ambientDrift 18s ease-in-out infinite alternate;
+    }
+    @keyframes ambientDrift { from { transform: translate3d(-1.5%, -1%, 0) scale(1); } to { transform: translate3d(1.5%, 1%, 0) scale(1.06); } }
+    .scroll-progress { position: fixed; inset: 0 auto auto 0; height: 3px; width: 0%; z-index: 9999; background: linear-gradient(90deg, var(--accent), #ffcf70, #a98cff); box-shadow: 0 0 14px rgba(255,113,59,.6); }
+    .pointer-glow { position: fixed; width: 280px; height: 280px; border-radius: 50%; pointer-events: none; z-index: -1; opacity: .14; filter: blur(50px); background: var(--accent); transform: translate(-50%,-50%); transition: opacity .3s ease; }
+    .site-header { transition: background .3s ease, box-shadow .3s ease, padding .3s ease; }
+    .site-header.is-scrolled { background: rgba(12,12,14,.94); box-shadow: 0 12px 35px rgba(0,0,0,.24); }
+    .nav-links a { position: relative; transition: color .25s ease, transform .25s ease; }
+    .nav-links a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: -7px; height: 2px; border-radius: 4px; background: var(--accent); transition: right .28s var(--ease-cinematic); }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+    .nav-links a:hover::after, .nav-links a.active::after { right: 0; }
+    .hero h1, .hero-title, .about-intro { text-wrap: balance; }
+    .hero h1, .hero-title { animation: titleEnter .85s var(--ease-cinematic) both; }
+    .hero-copy { animation: fadeLift .8s .12s var(--ease-cinematic) both; }
+    .hero-actions { animation: fadeLift .8s .22s var(--ease-cinematic) both; }
+    @keyframes titleEnter { from { opacity: 0; transform: translateY(24px); filter: blur(8px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+    @keyframes fadeLift { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(28px); filter: blur(4px); transition: opacity .75s var(--ease-cinematic), transform .75s var(--ease-cinematic), filter .75s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); filter: blur(0); }
+    .section-heading.reveal.visible > * { animation: fadeLift .65s var(--ease-cinematic) both; }
+    .section-heading.reveal.visible > *:nth-child(2) { animation-delay: .09s; }
+    .section-heading.reveal.visible > *:nth-child(3) { animation-delay: .16s; }
+    .reel-card, .account-card, .skill-card, .contact-form, .about-card {
+      transition: transform .35s var(--ease-cinematic), border-color .3s ease, box-shadow .35s ease, background .3s ease;
+    }
+    .reel-card:hover, .account-card:hover, .skill-card:hover { border-color: rgba(255,113,59,.72) !important; box-shadow: 0 18px 48px rgba(0,0,0,.28), 0 0 0 1px rgba(255,113,59,.08); }
+    .account-card:hover, .skill-card:hover { transform: translateY(-6px); }
+    .hero-actions a, .button, button, .reels-controls button, .contact-form button { position: relative; overflow: hidden; transition: transform .22s ease, box-shadow .25s ease, background .25s ease, border-color .25s ease; }
+    .hero-actions a:hover, .button:hover, .contact-form button:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(255,113,59,.18); }
+    .hero-actions a:active, .button:active, button:active { transform: scale(.97); }
+    .interactive-ripple { position: absolute; border-radius: 50%; pointer-events: none; background: rgba(255,255,255,.34); transform: scale(0); animation: rippleOut .55s ease-out forwards; }
+    @keyframes rippleOut { to { transform: scale(1); opacity: 0; } }
+    input, select, textarea { transition: border-color .25s ease, box-shadow .25s ease, background .25s ease; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent) !important; box-shadow: 0 0 0 3px rgba(255,113,59,.13); }
+    .contact-form:focus-within { border-color: rgba(255,113,59,.4); box-shadow: 0 16px 45px rgba(0,0,0,.2); }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+    footer { transition: color .3s ease; }
+    @media (pointer: coarse) { .pointer-glow { display: none; } }
+    @media (max-width: 700px) { body::before { animation-duration: 26s; } .reveal { transform: translateY(18px); } }
+    @media (prefers-reduced-motion: reduce) {
+      body::before, .hero h1, .hero-title, .hero-copy, .hero-actions { animation: none !important; }
+      .reveal { opacity: 1 !important; transform: none !important; filter: none !important; transition: none !important; }
+      .pointer-glow, .scroll-progress { display: none !important; }
+    }
+
   </style>
 </head>
 
@@ -593,8 +883,12 @@
             <!-- 03 Campus -->
             <article class="reel-card">
               <div class="reel-video">
-                <source src="reel-campus.mp4" type="video/mp4">
-                <p>Your browser does not support video playback.</p>
+                <video controls playsinline preload="metadata">
+                  <source src="campus(1).mp4" type="video/mp4">
+                  <source src="reel-campus.mp4" type="video/mp4">
+                  <source src="campus.mp4" type="video/mp4">
+                  Your browser does not support video playback.
+                </video>
               </div>
               <div class="reel-info">
                 <span class="reel-number">03 / CAMPUS</span>
@@ -730,7 +1024,8 @@
     <section class="section" id="about">
       <div class="section-inner reveal">
         <div class="eyebrow">04 / About Me</div>
-        <h2>Creative by vision.<br>Precise in every frame.</h2>
+        <h2 class="about-intro">Hi, I'm <span>Sravan Kumar.</span></h2>
+        <h3 class="about-tagline">Creative by vision. Precise in every frame.</h3>
 
         <p class="about-text">
           I'm Sravan Kumar, a video editor based in Hyderabad. I create
@@ -752,25 +1047,57 @@
         <div class="contact-panel reveal">
           <div class="eyebrow">05 / Contact</div>
           <h2>Have a project in mind?</h2>
-          <p class="about-text">
-            Let's collaborate and create something worth watching.
-          </p>
+          <p class="about-text">Tell me a little about your project. The form will prepare an email for you to review and send.</p>
+
+          <form class="contact-form" id="contact-form">
+            <div class="form-field">
+              <label for="contact-name">Your name</label>
+              <input id="contact-name" name="name" type="text" autocomplete="name" placeholder="Enter your name" required maxlength="100">
+            </div>
+            <div class="form-field">
+              <label for="contact-email">Your email</label>
+              <input id="contact-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required maxlength="150">
+            </div>
+            <div class="form-field full">
+              <label for="contact-service">What do you need?</label>
+              <select id="contact-service" name="service" required>
+                <option value="" disabled selected>Select a service</option>
+                <option>Instagram Reel Editing</option>
+                <option>YouTube Shorts Editing</option>
+                <option>YouTube Long-Form Video Editing</option>
+                <option>Cinematic Video Editing</option>
+                <option>College / Campus Reels</option>
+                <option>Event Highlights / Event Aftermovie</option>
+                <option>Wedding / Birthday / Celebration Video</option>
+                <option>Brand / Cafe / Restaurant Promotion</option>
+                <option>Product Advertisement</option>
+                <option>Business Promotional Video</option>
+                <option>Travel / Vlog Editing</option>
+                <option>Music Video Editing</option>
+                <option>Color Grading</option>
+                <option>Beat Sync / Transitions / Speed Ramps</option>
+                <option>Sound Design / Audio Cleanup</option>
+                <option>Captions / Subtitles</option>
+                <option>Motion Graphics / Animated Titles</option>
+                <option>Thumbnail / Cover Design</option>
+                <option>Social Media Content Package</option>
+                <option>Other Creative Project</option>
+              </select>
+            </div>
+            <div class="form-field full">
+              <label for="contact-message">Project details</label>
+              <textarea id="contact-message" name="message" placeholder="Share your idea, deadline, and any details..." required maxlength="3000"></textarea>
+            </div>
+            <div class="form-actions">
+              <button class="button button-primary" type="submit">Prepare Email ↗</button>
+              <p class="form-note">Your email app opens so you can review and send the message.</p>
+            </div>
+            <p class="form-status" id="contact-status" role="status" aria-live="polite"></p>
+          </form>
 
           <div class="contact-links">
-            <a class="button button-primary"
-              href="mailto:gaddamsravankumar21@gmail.com">
-              Email Me ↗
-            </a>
-
-            <a class="button"
-              href="https://www.instagram.com/sra1_kumar_05/"
-              target="_blank" rel="noopener noreferrer">
-              Instagram ↗
-            </a>
-
-            <a class="button" href="tel:+916304488113">
-              Call Me
-            </a>
+            <a class="button" href="https://www.instagram.com/sra1_kumar_05/" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+            <a class="button" href="tel:+916304488113">Call Me</a>
           </div>
         </div>
       </div>
@@ -813,6 +1140,22 @@
       });
     });
 
+    // Show a helpful message if a video path is missing or the file cannot be decoded.
+    document.querySelectorAll(".reel-card video").forEach(video => {
+      video.addEventListener("error", () => {
+        const card = video.closest(".reel-card");
+        const title = card?.querySelector(".reel-info h3")?.textContent || "This reel";
+        let notice = card?.querySelector(".video-error-note");
+        if (!notice && card) {
+          notice = document.createElement("p");
+          notice.className = "video-error-note";
+          notice.style.cssText = "padding:10px 14px;color:#ffb08f;font-size:12px;margin:0;background:#160f0d";
+          video.parentElement.insertAdjacentElement("afterend", notice);
+        }
+        if (notice) notice.textContent = `${title}: video file not found or unsupported. Check the exact filename in GitHub.`;
+      });
+    });
+
     // Pause other reels when one starts playing
     document.querySelectorAll(".reel-card video").forEach(video => {
       video.addEventListener("play", () => {
@@ -840,8 +1183,120 @@
       revealElements.forEach(element => element.classList.add("visible"));
     }
 
+
+
+    // Dynamic 3D reel carousel: cards tilt away from the center as you scroll.
+    (() => {
+      const track = document.getElementById("reels-track");
+      if (!track) return;
+      const cards = Array.from(track.querySelectorAll(".reel-card"));
+      let frame = 0;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      function updateReelDepth() {
+        frame = 0;
+        if (reduceMotion) {
+          cards.forEach(card => {
+            card.style.setProperty("--reel-rotate", "0deg");
+            card.style.setProperty("--reel-z", "0px");
+            card.style.setProperty("--reel-scale", "1");
+            card.style.opacity = "1";
+          });
+          return;
+        }
+        const bounds = track.getBoundingClientRect();
+        const center = bounds.left + bounds.width / 2;
+        const maxDistance = Math.max(bounds.width * .72, 1);
+        cards.forEach(card => {
+          const rect = card.getBoundingClientRect();
+          const cardCenter = rect.left + rect.width / 2;
+          const distance = (cardCenter - center) / maxDistance;
+          const normalized = Math.max(-1, Math.min(1, distance));
+          const rotate = normalized * -16;
+          const depth = (1 - Math.min(1, Math.abs(normalized))) * 22;
+          const scale = 1 - Math.min(1, Math.abs(normalized)) * .055;
+          const opacity = 1 - Math.min(1, Math.abs(normalized)) * .22;
+          card.style.setProperty("--reel-rotate", `${rotate.toFixed(2)}deg`);
+          card.style.setProperty("--reel-z", `${depth.toFixed(1)}px`);
+          card.style.setProperty("--reel-scale", scale.toFixed(3));
+          card.style.opacity = opacity.toFixed(3);
+        });
+      }
+      function scheduleDepthUpdate() {
+        if (!frame) frame = requestAnimationFrame(updateReelDepth);
+      }
+      track.addEventListener("scroll", scheduleDepthUpdate, { passive: true });
+      window.addEventListener("resize", scheduleDepthUpdate, { passive: true });
+      if ("ResizeObserver" in window) new ResizeObserver(scheduleDepthUpdate).observe(track);
+      updateReelDepth();
+    })();
+
+    // Contact form: validate fields and open the visitor's email app (no backend required).
+    const contactForm = document.getElementById("contact-form");
+    contactForm?.addEventListener("submit", event => {
+      event.preventDefault();
+      if (!contactForm.reportValidity()) return;
+      const formData = new FormData(contactForm);
+      const name = String(formData.get("name") || "").trim();
+      const email = String(formData.get("email") || "").trim();
+      const service = String(formData.get("service") || "").trim();
+      const message = String(formData.get("message") || "").trim();
+      const subject = encodeURIComponent(`Portfolio enquiry: ${service}`);
+      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nService: ${service}\n\nProject details:\n${message}`);
+      const status = document.getElementById("contact-status");
+      status.textContent = "Opening your email app. Please review the message and press Send.";
+      window.location.href = `mailto:gaddamsravankumar21@gmail.com?subject=${subject}&body=${body}`;
+    });
+
     document.getElementById("year").textContent =
       new Date().getFullYear();
+
+
+    // Site-wide polish: reading progress, header state, active navigation and subtle pointer glow.
+    (() => {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const progress = document.createElement('div'); progress.className = 'scroll-progress'; progress.setAttribute('aria-hidden','true'); document.body.appendChild(progress);
+      const glow = document.createElement('div'); glow.className = 'pointer-glow'; glow.setAttribute('aria-hidden','true'); document.body.appendChild(glow);
+      const header = document.querySelector('.site-header');
+      const navLinks = [...document.querySelectorAll('.nav-links a[href^="#"]')];
+      let queued = false;
+      function updateScrollUI() {
+        queued = false;
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        progress.style.width = (maxScroll > 0 ? window.scrollY / maxScroll * 100 : 0) + '%';
+        header?.classList.toggle('is-scrolled', window.scrollY > 18);
+      }
+      window.addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(updateScrollUI); } }, { passive: true });
+      updateScrollUI();
+      if (!reduceMotion && window.matchMedia('(pointer: fine)').matches) {
+        window.addEventListener('pointermove', event => {
+          glow.style.left = event.clientX + 'px'; glow.style.top = event.clientY + 'px';
+        }, { passive: true });
+      }
+      if ('IntersectionObserver' in window && navLinks.length) {
+        const sections = navLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+        const navObserver = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id));
+          });
+        }, { rootMargin: '-30% 0px -55% 0px', threshold: 0 });
+        sections.forEach(section => navObserver.observe(section));
+      }
+      if (!reduceMotion) {
+        document.querySelectorAll('.hero-actions a, .contact-form button, .reels-controls button').forEach(el => {
+          el.addEventListener('pointerdown', event => {
+            if (event.pointerType === 'touch') return;
+            const rect = el.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height) * 1.7;
+            const ripple = document.createElement('span'); ripple.className = 'interactive-ripple';
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = (event.clientX - rect.left - size / 2) + 'px';
+            ripple.style.top = (event.clientY - rect.top - size / 2) + 'px';
+            el.appendChild(ripple); ripple.addEventListener('animationend', () => ripple.remove(), { once: true });
+          });
+        });
+      }
+    })();
+
   </script>
 
 </body>
