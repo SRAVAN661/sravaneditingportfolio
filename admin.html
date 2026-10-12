@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b0b0f"><title>Sravan Studio — Admin</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <main id="loginView" class="login-wrap">
+    <section class="login-card">
+      <div class="brand-mark">S<span>.</span></div>
+      <p class="eyebrow">PRIVATE WORKSPACE</p><h1>Welcome back<span class="accent">.</span></h1>
+      <p class="muted">Sign in to manage your editing portfolio.</p>
+      <form id="loginForm">
+        <label for="loginEmail">Admin email</label><input id="loginEmail" type="email" autocomplete="username" required placeholder="you@example.com">
+        <label for="loginPassword">Password</label><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Your password">
+        <button class="btn primary full" type="submit">Sign in <span>↗</span></button>
+      </form>
+      <p id="loginMessage" class="message" role="status"></p>
+      <p class="security-note">Private admin area · Do not share your login details</p>
+    </section>
+  </main>
+
+  <div id="appView" class="app-shell hidden">
+    <aside class="sidebar">
+      <a class="brand" href="#dashboard"><span class="brand-mark small">S<span>.</span></span><span>SRAVAN<span class="brand-sub">CREATOR STUDIO</span></span></a>
+      <div class="side-label">WORKSPACE</div>
+      <nav id="sideNav">
+        <button class="nav-item active" data-page="dashboard"><span>◫</span> Overview</button>
+        <button class="nav-item" data-page="enquiries"><span>✉</span> Enquiries <b id="newBadge" class="badge">0</b></button>
+        <button class="nav-item" data-page="reels"><span>▶</span> Reels</button>
+        <button class="nav-item" data-page="services"><span>✳</span> Services</button>
+      </nav>
+      <div class="sidebar-bottom"><div class="online-dot"></div><div><strong>Workspace active</strong><small>Supabase connected after setup</small></div></div>
+    </aside>
+
+    <section class="main-area">
+      <header class="topbar"><div><p class="eyebrow">SRAVAN EDITING PORTFOLIO</p><h2 id="pageTitle">Overview</h2></div><div class="top-actions"><a class="btn secondary" href="/" target="_blank" rel="noreferrer">View website ↗</a><button id="logoutBtn" class="btn ghost">Log out</button></div></header>
+      <div id="globalMessage" class="global-message" role="status"></div>
+
+      <section class="page" id="page-dashboard">
+        <div class="welcome-banner"><div><p class="eyebrow">YOUR CREATIVE SPACE</p><h1>Make good work.<br><span>Show it to the world.</span></h1><p class="muted">Manage incoming projects and keep your portfolio fresh.</p></div><div class="banner-orb">S<span>.</span></div></div>
+        <div class="stats-grid">
+          <article class="stat-card"><span class="stat-icon">✉</span><p>Total enquiries</p><strong id="statTotal">—</strong><small>All client requests</small></article>
+          <article class="stat-card"><span class="stat-icon">✦</span><p>New enquiries</p><strong id="statNew">—</strong><small>Need your attention</small></article>
+          <article class="stat-card"><span class="stat-icon">▶</span><p>Published reels</p><strong id="statReels">—</strong><small>Visible in portfolio</small></article>
+          <article class="stat-card"><span class="stat-icon">✳</span><p>Active services</p><strong id="statServices">—</strong><small>Available to clients</small></article>
+        </div>
+        <div class="panel"><div class="panel-heading"><div><p class="eyebrow">LATEST ACTIVITY</p><h3>Recent enquiries</h3></div><button class="text-btn" data-goto="enquiries">View all →</button></div><div id="recentEnquiries" class="table-wrap"><div class="empty-state">Loading enquiries…</div></div></div>
+      </section>
+
+      <section class="page hidden" id="page-enquiries">
+        <div class="section-intro"><div><p class="eyebrow">CLIENT MESSAGES</p><h1>Enquiries</h1><p class="muted">Review requests and track your follow-ups.</p></div><button id="refreshEnquiries" class="btn secondary">↻ Refresh</button></div>
+        <div class="panel"><div id="enquiryTable" class="table-wrap"><div class="empty-state">Loading enquiries…</div></div></div>
+      </section>
+
+      <section class="page hidden" id="page-reels">
+        <div class="section-intro"><div><p class="eyebrow">PORTFOLIO CONTENT</p><h1>Reels</h1><p class="muted">Add video links, control visibility and remove old projects.</p></div><button id="showReelForm" class="btn primary">＋ Add reel</button></div>
+        <form id="reelForm" class="panel editor-form hidden"><div class="panel-heading"><div><p class="eyebrow">NEW PROJECT</p><h3>Add a reel</h3></div><button type="button" id="hideReelForm" class="icon-btn" aria-label="Close form">×</button></div>
+          <div class="form-grid"><div><label for="reelTitle">Title *</label><input id="reelTitle" required maxlength="120" placeholder="e.g. Campus Cinematic"></div><div><label for="reelCategory">Category</label><input id="reelCategory" maxlength="80" placeholder="e.g. Campus / Event"></div><div class="span-two"><label for="reelUrl">Video URL *</label><input id="reelUrl" type="url" required placeholder="https://.../video.mp4"><small>Use a publicly accessible MP4 URL. Existing repository video paths can also be used.</small></div><div class="span-two"><label for="reelThumb">Thumbnail URL (optional)</label><input id="reelThumb" type="url" placeholder="https://.../thumbnail.jpg"></div><div><label for="reelOrder">Display order</label><input id="reelOrder" type="number" value="0"></div><div class="check-field"><label><input id="reelPublished" type="checkbox" checked> Publish on website</label></div></div>
+          <button class="btn primary" type="submit">Save reel</button><p id="reelFormMessage" class="message"></p>
+        </form>
+        <div id="reelGrid" class="reel-grid"><div class="empty-state">Loading reels…</div></div>
+      </section>
+
+      <section class="page hidden" id="page-services">
+        <div class="section-intro"><div><p class="eyebrow">WHAT YOU OFFER</p><h1>Services</h1><p class="muted">Manage the services available in your contact form.</p></div><button id="showServiceForm" class="btn primary">＋ Add service</button></div>
+        <form id="serviceForm" class="panel editor-form hidden"><div class="panel-heading"><div><p class="eyebrow">NEW OFFERING</p><h3>Add a service</h3></div><button type="button" id="hideServiceForm" class="icon-btn" aria-label="Close form">×</button></div><div class="form-grid"><div><label for="serviceName">Service name *</label><input id="serviceName" required maxlength="100" placeholder="e.g. Instagram Reels Editing"></div><div><label for="serviceDescription">Short description</label><input id="serviceDescription" maxlength="240" placeholder="A short description"></div></div><button class="btn primary" type="submit">Save service</button><p id="serviceFormMessage" class="message"></p></form>
+        <div id="serviceList" class="service-list"><div class="empty-state">Loading services…</div></div>
+      </section>
+      <footer class="footer-note">SRAVAN STUDIO <span>•</span> Keep creating.</footer>
+    </section>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="admin.js"></script>
+</body></html>
