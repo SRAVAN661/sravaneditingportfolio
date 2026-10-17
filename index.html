@@ -1177,6 +1177,8 @@
     © <span id="year"></span> Sravan Kumar · Video Editor & Creative Visuals
   </footer>
 
+  <!-- Supabase client: publishable key is intended for browser use; never use a secret/service-role key here. -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
 
   <script>
@@ -1299,21 +1301,53 @@
       updateReelDepth();
     })();
 
-    // Contact form: validate fields and open the visitor's email app (no backend required).
+    // Contact form: save enquiries to Supabase.
     const contactForm = document.getElementById("contact-form");
-    contactForm?.addEventListener("submit", event => {
+    const contactStatus = document.getElementById("contact-status");
+    const SUPABASE_URL = "https://rzvkoancndbgjqptxxxv.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_iq4Bl1c729mHPTjGMBuOWQ_Xv858HbO";
+    const supabaseClient = window.supabase?.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+    contactForm?.addEventListener("submit", async event => {
       event.preventDefault();
       if (!contactForm.reportValidity()) return;
+      if (!supabaseClient) {
+        contactStatus.textContent = "Connection error. Please refresh the page and try again.";
+        return;
+      }
+
+      const submitButton = contactForm.querySelector('button[type="submit"]');
       const formData = new FormData(contactForm);
-      const name = String(formData.get("name") || "").trim();
-      const email = String(formData.get("email") || "").trim();
-      const service = String(formData.get("service") || "").trim();
-      const message = String(formData.get("message") || "").trim();
-      const subject = encodeURIComponent(`Portfolio enquiry: ${service}`);
-      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nService: ${service}\n\nProject details:\n${message}`);
-      const status = document.getElementById("contact-status");
-      status.textContent = "Opening your email app. Please review the message and press Send.";
-      window.location.href = `mailto:gaddamsravankumar21@gmail.com?subject=${subject}&body=${body}`;
+      const enquiry = {
+        name: String(formData.get("name") || "").trim(),
+        email: String(formData.get("email") || "").trim(),
+        service: String(formData.get("service") || "").trim(),
+        message: String(formData.get("message") || "").trim(),
+        status: "New"
+      };
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending...";
+      contactStatus.textContent = "Submitting your enquiry...";
+
+      try {
+        const { error } = await supabaseClient
+          .from("enquiries")
+          .insert([enquiry]);
+
+        if (error) throw error;
+        contactStatus.textContent = "Thank you! Your enquiry was submitted successfully.";
+        contactForm.reset();
+      } catch (error) {
+        console.error("Enquiry submission failed:", error);
+        contactStatus.textContent = "Sorry, your enquiry could not be saved. Please try again or contact me on Instagram.";
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Send Enquiry ↗";
+      }
     });
 
     document.getElementById("year").textContent =
