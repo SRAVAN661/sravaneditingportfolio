@@ -1117,7 +1117,7 @@
         <div class="contact-panel reveal">
           <div class="eyebrow">05 / Contact</div>
           <h2>Have a project in mind?</h2>
-          <p class="about-text">Tell me a little about your project. The form will prepare an email for you to review and send.</p>
+          <p class="about-text">Tell me a little about your project. Your enquiry will be saved and sent to me for review.</p>
 
           <form class="contact-form" id="contact-form">
             <div class="form-field">
@@ -1158,8 +1158,8 @@
               <textarea id="contact-message" name="message" placeholder="Share your idea, deadline, and any details..." required maxlength="3000"></textarea>
             </div>
             <div class="form-actions">
-              <button class="button button-primary" type="submit">Prepare Email ↗</button>
-              <p class="form-note">Your email app opens so you can review and send the message.</p>
+              <button class="button button-primary" type="submit">Send Enquiry ↗</button>
+              <p class="form-note">Your details will be submitted securely through the contact form.</p>
             </div>
             <p class="form-status" id="contact-status" role="status" aria-live="polite"></p>
           </form>
@@ -1339,7 +1339,27 @@
           .insert([enquiry]);
 
         if (error) throw error;
-        contactStatus.textContent = "Thank you! Your enquiry was submitted successfully.";
+
+        // Send an email notification after the enquiry is saved.
+        // The Resend API key stays safely inside the Supabase Edge Function.
+        const { error: emailError } = await supabaseClient.functions.invoke(
+          "notify-enquiry",
+          {
+            body: {
+              name: enquiry.name,
+              email: enquiry.email,
+              service: enquiry.service,
+              message: enquiry.message
+            }
+          }
+        );
+
+        if (emailError) {
+          console.error("Email notification failed:", emailError);
+          contactStatus.textContent = "Your enquiry was saved, but the email notification could not be sent. Please check the notification setup.";
+        } else {
+          contactStatus.textContent = "Thank you! Your enquiry was submitted successfully.";
+        }
         contactForm.reset();
       } catch (error) {
         console.error("Enquiry submission failed:", error);
